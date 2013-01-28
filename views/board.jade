@@ -1,0 +1,17 @@
+  div.row
+   div.offset11
+     a(href="/write").btn.btn-info.offset8 Write
+  table.table.table-striped.table-bordered.table-condensed
+   thead
+    tr
+     th 제목
+     th 조회수
+     th 글쓴이
+     th
+   tbody
+   each data, i in locals
+    tr
+     td.title:  a(href='/board/#{data._id}')  #{data.subject}
+     td #{data.hit}
+     td #{data.author}
+     td
