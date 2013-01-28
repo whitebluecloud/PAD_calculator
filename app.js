@@ -36,7 +36,9 @@ app.configure('development', function(){
 server = http.createServer(app);
 server.listen(3000);
 
-app.get('/', routes.index);
+app.get('/', function(req, res){
+    res.redirect('/exp');
+});
 app.get('/users', user.list);
 app.get('/exp', function(req,res){
     res.render('exp.ejs',{
