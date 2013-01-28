@@ -75,11 +75,13 @@ app.post('/exp', function(req,res){
                 monster.list[i].exp = exp.exp_200m;
             }
             else{
-                monster.list[i].exp = null;
+                res.end('몬스터가 없어요');
             }
 	    res.render('exp.ejs',{
 		result : monster.list[i]
 	    });
+	}else{
+	    res.end('the monster is not found');
 	}
     }
 });
