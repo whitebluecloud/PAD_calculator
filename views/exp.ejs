@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'>
+<link rel='stylesheet' href='/stylesheets/style.css'>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style type="text/css">
 .center-table
@@ -62,7 +63,16 @@ tr td th{
 	</tr>
 	<tr>
 	    <td><%= result.no %></td>
-	    <td><%= result.name %></td>
+	    <td>
+		<% if(result.no < 10) { %>
+		<img src="/images/00<%= result.no %>.png"/>
+		<% } else if(result.no >=10 && result.no <100) { %>
+		<img src="/images/0<%= result.no %>.png"/>
+		<% } else { %>
+		<img src="/images/<%= result.no %>.png"/>
+		<% } %>
+		<%= result.name %>
+	    </td>
 	    <td><%= result.type %>만</td>
 	</tr>
     </table>
