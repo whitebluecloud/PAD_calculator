@@ -39,7 +39,7 @@ server.listen(80);
 app.get('/', function(req, res){
     res.redirect('/exp');
 });
-app.get('/users', user.list);
+
 app.get('/exp', function(req,res){
     res.render('exp.ejs',{
         exp_100m : exp.exp_100m,
@@ -50,43 +50,39 @@ app.get('/exp', function(req,res){
         result : null
     });
 });
-
 app.post('/exp', function(req,res){
     var search_no = req.body.no;
     for(var i=0; i< monster.list.length; i++){
-	if(monster.list[i].no == search_no){
-	    if(monster.list[i].type==100){
-		monster.list[i].exp = exp.exp_100m;	
-	    }
-	    else if(monster.list[i].type==150){
-                monster.list[i].exp = exp.exp_150m;
-            }
-	    else if(monster.list[i].type==200){
-                monster.list[i].exp = exp.exp_200m;
-	    }
-            else if(monster.list[i].type==250){
-                monster.list[i].exp = exp.exp_250m;
-            }
-            else if(monster.list[i].type==300){
-                monster.list[i].exp = exp.exp_300m;
-            }
-            else if(monster.list[i].type==400){
-                monster.list[i].exp = exp.exp_400m;
-            }
-            else if(monster.list[i].type==200){
-                monster.list[i].exp = exp.exp_200m;
-            }else{
-		res.redirect('/exp');
-	    }
-	     res.render('exp.ejs',{
-	        result: monster.list[i]
-	    });
-	}
+		if(monster.list[i].no == search_no){
+			if(monster.list[i].type==100){
+			monster.list[i].exp = exp.exp_100m;	
+			}
+			else if(monster.list[i].type==150){
+					monster.list[i].exp = exp.exp_150m;
+				}
+			else if(monster.list[i].type==200){
+					monster.list[i].exp = exp.exp_200m;
+			}
+				else if(monster.list[i].type==250){
+					monster.list[i].exp = exp.exp_250m;
+				}
+				else if(monster.list[i].type==300){
+					monster.list[i].exp = exp.exp_300m;
+				}
+				else if(monster.list[i].type==400){
+					monster.list[i].exp = exp.exp_400m;
+				}
+				else if(monster.list[i].type==200){
+					monster.list[i].exp = exp.exp_200m;
+				}else{
+			res.redirect('/exp');
+			}
+			 res.render('exp.ejs',{
+				result: monster.list[i]
+			});
+		}
     }
     res.render('exp.ejs',{
-	result: monster.list[i]
+		result: monster.list[i]
     });
 });
-
-
-
