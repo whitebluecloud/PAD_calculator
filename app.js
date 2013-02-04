@@ -38,7 +38,7 @@ app.configure('development', function(){
 
 server = http.createServer(app);
 io = sio.listen(server);
-server.listen(3000);
+server.listen(80);
 
 app.get('/', function(req, res){
     res.redirect('/exp');
