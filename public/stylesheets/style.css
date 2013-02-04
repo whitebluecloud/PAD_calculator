@@ -8,6 +8,9 @@ a {
   color: #00B7FF;
 }
 */
+body {
+	padding: 0 1%;
+}
 .table td {
 	vertical-align: middle;
 }
