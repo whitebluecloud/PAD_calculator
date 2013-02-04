@@ -20,7 +20,7 @@ var express = require('express')
 var app = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || 80);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.set('view options', {layout:false});
@@ -38,7 +38,7 @@ app.configure('development', function(){
 
 server = http.createServer(app);
 io = sio.listen(server);
-server.listen(3000);
+server.listen(80);
 
 app.get('/', function(req, res){
     res.redirect('/exp');
