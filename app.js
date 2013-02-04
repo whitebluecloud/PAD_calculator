@@ -20,7 +20,7 @@ var express = require('express')
 var app = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', process.env.PORT || 80);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.set('view options', {layout:false});
@@ -99,15 +99,16 @@ io.enable('browser client gzip');          // gzip the file
 io.set('log level', 1);
 var nicklist = {};
 var nickidlist = {};
-
+var nicklistCnt = 0;
 io.sockets.on('connection',function(socket){
     socket.on('systemIn',function(data){
         if(data.name)
         {
+            nicklistCnt++;
             //최초 입장시 아이디/소켓코드 저장
             nicklist[data.name] = socket.nickname = data.name;
             nickidlist[data.name] = socket.id;
-
+	    data.nicklistCnt = nicklistCnt;
             io.sockets.emit('systemIn',data);
             io.sockets.emit('systemList',nicklist);
         }
@@ -128,7 +129,8 @@ io.sockets.on('connection',function(socket){
     //퇴장 처리
     socket.on('disconnect',function(){
         if(socket.nickname){
-            socket.broadcast.emit('systemOut',{name:socket.nickname});
+	    nicklistCnt--;
+            socket.broadcast.emit('systemOut',{name:socket.nickname, nicklistCnt:nicklistCnt});
             delete nicklist[socket.nickname];
             io.sockets.emit('systemList',nicklist);
         }
