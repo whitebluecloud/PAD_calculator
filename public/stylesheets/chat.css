@@ -1,0 +1,28 @@
+body{margin:0;padding:0;}
+#wrap{ width:100%; height:100%; border:0px solid #aaa; }
+#wrap > header { background-color:#545765; border:1px solid #aaa }
+#wrap > header > h1{ font-size:1.0em; text-align:center; color:#FFF; }
+#wrap > section{height:100%; border:0px solid #F00}
+#wrap > footer{ background-color:#545765; border:1px solid #FFF; font-size:0.8em; color:#FFF; text-align:center; padding:5px 0; }
+#door{ width:100%; height:150px; }
+#door p{ margin:5px ; width:97%;}
+#msg{ width:90%; height:300px; overflow-y:scroll; margin:auto; border:1px solid #aaa; }
+#chat{display:none;}
+#edit{ text-align:center; }
+#txt{ width:70%; }
+
+.ColorBlotch {
+    border: 1px solid #000000;
+    padding: 0 2px 0 2px;
+    font-family: monospace;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.code {
+  background-color: #fff;
+  color: #000;
+  font-family: monospace;
+  overflow: auto;
+  border: 1px dashed #000;
+ }

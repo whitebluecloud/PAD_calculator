@@ -1,0 +1,118 @@
+<%- include layout.ejs %>
+<script src="http://54.248.224.154:3000/socket.io/lib/socket.io.js"></script>
+<script type="text/javascript" src="/javascripts/bootstrap-colorpicker.js"></script>
+<link rel='stylesheet' href='/stylesheets/colorpicker.css'>
+<link rel='stylesheet' href='/stylesheets/chat.css'>
+<script type="text/javascript">
+var f_color = '#000000';
+$(document).ready(function(){
+    $('#cp').colorpicker().on('changeColor', function(ev){
+	    f_color = ev.color.toHex();
+    });
+});
+    $(function(){
+	var nick_name = '';
+	var socket = io.connect();
+	$("#enter").click(function(){
+	    nick_name = $('#uid').val();
+	    if(nick_name == "")
+	    {
+		alert('아이디를 입력하세요');
+	    }
+	    else
+	    {
+		socket.emit('systemIn',{
+		    name : nick_name
+		});
+
+
+		$("#door").slideUp(200).delay(200,function(){
+		    $("#chat").slideDown(200);
+		});
+	    }
+		
+	});
+
+	socket.on('systemList',function(data){
+	    $("#nick_lst").empty();
+	    $("#nick_lst").append('<option value="poblic">모두</option>');
+	    for (var i in data) {
+		$("#nick_lst").append('<option value="'+data[i]+'">'+data[i]+'</option>');
+	    }
+	});
+	
+	socket.on('systemIn',function(data){
+	    $('#msg').append('<dd>'+data.name+'님이 입장하셨습니다.</dd>');
+	    scrollDonw();
+	});
+
+	socket.on('systemOut',function(data){
+	    $('#msg').append('<dd>'+data.name+'님이 퇴장하셨습니다.</dd>');
+	    scrollDonw();
+	});
+
+	socket.on('message',function(data){
+	    if(data.name !== nick_name){
+		$('#msg').append('<dt style="float:left;clear:both">'+data.name+' : </dt><dd style="float:left; color:'+data.color+'">'+data.message+'</dd>');
+	    }else{
+		$('#msg').append('<dt style="float:right;clear:both;color:'+data.color+'">   '+data.message+'</dt><dd style="float:right;">'+data.name+' :    </dd>');
+	    }
+	    scrollDonw();
+	});
+
+	$("#txt").keypress(function(ent){
+	    if(ent.which == 13){
+		$("#input").click();
+	    }
+	});
+	
+	$("#input").bind('click',function(){
+	    if($("#txt").val() == '')return;
+	    socket.emit('message',{
+		type : $("#nick_lst").val(),
+		name : nick_name,
+		message : $("#txt").val(),
+		color : f_color
+	    });
+	    $("#txt").val('').focus();
+	    
+	});
+    });
+    function scrollDonw()
+    {
+	$("#msg").animate({'scrollTop':$("#msg")[0].scrollHeight},200);
+    }
+    </script>
+</head>
+<body>
+<%- include gnb.ejs %>
+<section id="wrap">
+    <section>
+	<div id="door" onSubmit="return false;">
+	    <form class="form-inline">
+		<input type="text" name='uid' id="uid" value="" class="input-medium" placeholder="닉네임을 입력해주세요." />
+		<button type="submit" id='enter' class="btn">입장</button>
+	    </form>
+	</div>
+	<div id="chat">
+	    <dl id="msg" style="overflow:hidden;clear:both">
+	    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	    </dl>
+	    <div id="edit">
+		<select name="nick_lst" id="nick_lst" style="display:none;">
+		    <option value="poblic">모두</option>
+		</select>
+		<span id="cp" class="input-append color" data-color="#000" data-color-format="hex">
+		    <span class="add-on"><i style="background-color:#000"></i></span>
+                    <input id="f_color" type="text" class="span2" value="" readonly style="display:none">
+		</span>
+		<span class="input-append color">
+		    <input type="text" name="txt" id="txt" class="input-large" style="height:20px;"/>
+		    <button id="input" class="btn btn-large" style="width:100px">입력</button>
+		</span>
+	    </div>
+	</div>
+    </section>
+</section>
+</body>
+</html>

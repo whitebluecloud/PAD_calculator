@@ -1,0 +1,23 @@
+.center-table
+{
+  margin: 0 auto !important;
+  float: none !important;
+}
+.table td{
+  text-align: center;
+}
+.table th{
+  text-align: center;
+}
+#exp_table tr td{
+  text-align: center;
+}
+tr td th{
+  text-align: center;
+}
+.popover-title{
+  text-align: center;
+}
+.popover-content{
+  text-align: center;
+}

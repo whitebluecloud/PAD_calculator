@@ -11,13 +11,16 @@ var express = require('express')
   , ejs = require('ejs')
   , exp = require('./exp')
   , monster = require('./monlist')
+//socket관련 require
+  , sio = require('socket.io')
+  , sanitize = require('validator').sanitize
 ;
 
 // express 3.0 이후에는 아래와 같은 방법으로 사용한다.
 var app = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 80);
+  app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.set('view options', {layout:false});
@@ -34,7 +37,8 @@ app.configure('development', function(){
 });
 
 server = http.createServer(app);
-server.listen(80);
+io = sio.listen(server);
+server.listen(3000);
 
 app.get('/', function(req, res){
     res.redirect('/exp');
@@ -86,3 +90,53 @@ app.post('/exp', function(req,res){
 		result: monster.list[i]
     });
 });
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// chatting 관련
+io.enable('browser client minification');  // send minified client
+io.enable('browser client etag');          // apply etag caching logic based on version number
+io.enable('browser client gzip');          // gzip the file
+io.set('log level', 1);
+var nicklist = {};
+var nickidlist = {};
+
+io.sockets.on('connection',function(socket){
+    socket.on('systemIn',function(data){
+        if(data.name)
+        {
+            //최초 입장시 아이디/소켓코드 저장
+            nicklist[data.name] = socket.nickname = data.name;
+            nickidlist[data.name] = socket.id;
+
+            io.sockets.emit('systemIn',data);
+            io.sockets.emit('systemList',nicklist);
+        }
+    });
+    socket.on('message',function(data){
+        data.message = sanitize(data.message).xss();
+        if(data.type == 'poblic')
+        {
+            io.sockets.emit('message',data);
+        }
+        else
+        {
+            //귓속말 처리
+            io.sockets.sockets[nickidlist[data.name]].emit('message',data);
+            io.sockets.sockets[nickidlist[data.type]].emit('message',data);
+        }
+    });
+    //퇴장 처리
+    socket.on('disconnect',function(){
+        if(socket.nickname){
+            socket.broadcast.emit('systemOut',{name:socket.nickname});
+            delete nicklist[socket.nickname];
+            io.sockets.emit('systemList',nicklist);
+        }
+    });
+});
+
+app.get('/chat', function(req, res){
+    res.render('chat.ejs');
+});
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
