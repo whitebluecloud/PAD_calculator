@@ -14,6 +14,7 @@ var express = require('express')
 //socket관련 require
   , sio = require('socket.io')
   , sanitize = require('validator').sanitize
+  , mongoose = require('mongoose')
 ;
 
 // express 3.0 이후에는 아래와 같은 방법으로 사용한다.
@@ -39,6 +40,48 @@ app.configure('development', function(){
 server = http.createServer(app);
 io = sio.listen(server);
 server.listen(80);
+
+// Database Connection
+var mongoUri = 'mongodb://pad:pad2013@linus.mongohq.com:10061/pad';
+var mongoUri2 = 'mongodb://pad:pad2013@ds037837.mongolab.com:37837/pad';
+mongoose.connect(mongoUri);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'db connection error:'));
+
+var Schema = mongoose.Schema;
+// user 정의
+var userSchema = new Schema({
+	nickname : String,
+	rank : Number,
+	leader : String,
+	id : Number,
+	comment : String,
+	time : { type: Date, default: Date.now }
+});
+userSchema.methods.addLog = function() {
+	console.log('New user added');
+	console.log('nickname 	:' + this.nickname);
+	console.log('rank 			:' + this.rank);
+	console.log('leader 		:' + this.leader);
+	console.log('id 				:' + this.id);
+	console.log('comment 	:' + this.comment);
+	console.log('time				:' + this.time);
+};
+var User = mongoose.model('users', userSchema);
+
+// request 정의
+var talkSchema = new Schema({
+	name : { type: String, default: '나그네' },
+	comment : String,
+	time :  { type: Date, default: Date.now }
+});
+talkSchema.methods.addLog = function() {
+	console.log('New talk added');
+	
+	console.log('comment 	:' + this.comment);
+	console.log('time 		:' + this.time);
+};
+var Talk = mongoose.model('talks', talkSchema);
 
 app.get('/', function(req, res){
     res.redirect('/exp');
@@ -142,3 +185,23 @@ app.get('/chat', function(req, res){
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// 기능요청 또는 개선사항 창구
+app.get('/talk', function(req, res) {
+	Talk.find({}, function(err, data) {
+		if (err) console.error(err);
+		console.log(data);
+		res.render('talk', { 'talks': data });
+	});	
+});
+
+app.post('/talk', function(req, res) {
+	var newTalk = new Talk();
+	if (req.body.name != '') newTalk.name = req.body.name;	
+	newTalk.comment = req.body.comment;	
+	
+	newTalk.save(function(err, newTalk) {
+		if (err) console.error(err);
+		newTalk.addLog();
+		res.redirect('/talk');
+	});
+});
