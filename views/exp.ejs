@@ -22,13 +22,13 @@ _gaq.push(['_trackPageview']);
         <fieldset>
           <label>몬스터 번호</label>
           <input type="number" class="span12" name="no" id="no" placeholder="몬스터번호를 입력하세요!"/>
-          <button type="submit" class="btn btn-large btn-block btn-primary"><i class="icon-search icon-white"></i>검색</button>
+          <button type="submit" class="btn btn-block btn-primary"><i class="icon-search icon-white"></i>검색</button>
         </fieldset>
       </form>
     </div>
-    <div class="span12">
+</div>    
       <% if(result){ %>
-      <h4>몬스터 정보</h4>
+      <p class="text-info">몬스터 정보</p>
       <table class="table table-striped center-table">
         <tr>
           <th>no.</th>
@@ -50,7 +50,7 @@ _gaq.push(['_trackPageview']);
           <td><%= result.type %>만</td>
         </tr>
       </table>
-      <h4>몬스터 경험치  (<%= result.type %>만)</h4>
+      <p class="text-info">몬스터 경험치  (<%= result.type %>만)</p>
       <table id="exp_table" class="table table-striped center-table">
         <tr>
          <th>레벨</th>
@@ -64,9 +64,7 @@ _gaq.push(['_trackPageview']);
       <% } %>
     </table>
     <% } %>
-  </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<%- include ads_bottom.ejs %>
 <script src="/javascripts/bootstrap-tooltip.js"></script>  
 <script src="/javascripts/bootstrap-popover.js"></script>  
 <script>  
@@ -81,19 +79,5 @@ $(function ()
  $("#exp_table tr").click(function() { hidePopovers(); $(this).popover('show')});
 });  
 </script>  
-<div id="mobile_google_ad" style="position: fixed; vertical-align:bottom; left: 0px; bottom: 0px; width: 320px; height: 50px; z-index: 1">
-  <script type="text/javascript"><!--
-  google_ad_client = "ca-pub-8411054487726599";
-  /* pad_bottom */
-  google_ad_slot = "8012929820";
-  google_ad_width = 320;
-  google_ad_height = 50;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-</div>
-
 </body>
 </html>

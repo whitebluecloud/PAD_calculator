@@ -1,4 +1,5 @@
 <%- include layout.ejs %>
+<title>퍼즐앤드래곤 채팅방</title>
 <script src="http://54.248.224.154:3000/socket.io/lib/socket.io.js"></script>
 <script type="text/javascript" src="/javascripts/bootstrap-colorpicker.js"></script>
 <link rel='stylesheet' href='/stylesheets/colorpicker.css'>
@@ -121,18 +122,6 @@ function scrollDonw() {
 	</div>
     </section>
 </section>
-<div id="mobile_google_ad" style="position: fixed; vertical-align:bottom; left: 0px; bottom: 0px; width: 320px; height: 50px; z-index: 1">
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-8411054487726599";
-/* pad_bottom */
-google_ad_slot = "8012929820";
-google_ad_width = 320;
-google_ad_height = 50;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-</div>
+<%- include ads_bottom.ejs %>
 </body>
 </html>
