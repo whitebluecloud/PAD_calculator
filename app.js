@@ -1,4 +1,7 @@
-
+require('nodefly').profile(
+    '2d796209b68c248468a0d1cad8205a33',
+    'Puzzle & Dragon Exp Calc'
+);
 /**
  * Module dependencies.
  */

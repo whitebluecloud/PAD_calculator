@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "Puzzle & Dragon Exp Calc",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "3.0.3",
     "jade": "*",
-    "forever": "*"
+    "forever": "*",
+    "nodefly": "stable"
   }
 }
